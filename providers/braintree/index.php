@@ -171,8 +171,6 @@ try {
                         console.log(error);
                         console.error("Error:", error);
                     });
-
-
             }).catch(function (error) {
                 console.log(error)
             });
