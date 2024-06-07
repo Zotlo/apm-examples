@@ -197,7 +197,7 @@ foreach ($data['result']['provider']['methods'] as $method) {
             function authorizePayment(token) {
                 return new Promise(function (resolve, reject) {
                     var xhr = new XMLHttpRequest;
-                    var requestUrl = 'https://payment-test-zotlo.stage.mobylonia.com/applepay/authorize';
+                    var requestUrl = 'apm.php';
 
                     xhr.open('POST', requestUrl);
 
