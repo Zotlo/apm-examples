@@ -60,5 +60,18 @@
     </a>
 </div>
 
+
+<div>
+    <a href="/providers/googlepay/index.php" target="_blank" class="payment-button">
+        <img src="/static/providers/gpay.png" alt="Braintree Logo" width="150" height="50">
+    </a>
+</div>
+
+<div>
+    <a href="/providers/applepay/index.php" target="_blank" class="payment-button">
+        <img src="/static/providers/apay.png" alt="Braintree Logo" width="150" height="50">
+    </a>
+</div>
+
 </body>
 </html>
