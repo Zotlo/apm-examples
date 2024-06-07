@@ -21,7 +21,7 @@ $_POST = json_decode(file_get_contents('php://input'), true);
 $body = '{
     "transactionId":  "' . $_POST["transactionId"] . '",
     "paymentHash":  "' . $_POST["paymentHash"] . '",
-    "providerToken":  "' .base64_encode($_POST["providerToken"]). '",
+    "providerToken":  "' .base64_encode($_POST["token"]). '",
 	"paymentMethod": "applePay"
 }';
 

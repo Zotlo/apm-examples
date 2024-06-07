@@ -157,7 +157,7 @@ foreach ($data['result']['provider']['methods'] as $method) {
                         paymentMethod: 'applePay',
                     }));
                 });
-            };
+            }
 
             /**
              * This is called when user dismisses the payment modal
@@ -175,20 +175,60 @@ foreach ($data['result']['provider']['methods'] as $method) {
              */
             session.onpaymentauthorized = (event) => {
                 const payment = event.payment;
-                console.log(payment);
-                // You can see a sample `payment` object in an image below.
-                // Use the token returned in `payment` object to create the charge on your payment gateway.
 
-                if (chargeCreationSucceeds) {
-                    // Capture payment from Apple Pay
-                    session.completePayment(ApplePaySession.STATUS_SUCCESS);
-                    location.href = '/providers/googlepay/success.php';
-                } else {
-                    console.log("FAIL");
-                    // Release payment from Apple Pay
-                    session.completePayment(ApplePaySession.STATUS_FAILURE);
-                }
+                var promise = authorizePayment(payment.token);
+                promise.then(function (response) {
+                    if(response.result.response.isSuccess) {
+                        console.log("PAYMENT SUCCESS");
+                        location.href = '/providers/applepay/success.php';
+                        session.completePayment(ApplePaySession.STATUS_SUCCESS);
+                    } else {
+                        session.completePayment(ApplePaySession.STATUS_FAILURE);
+                        console.log("PAYMENT FAIL");
+
+                    }
+                });
             };
+
+
+            /**
+             * Makes an AJAX request to your application server with URL provided by Apple
+             */
+            function authorizePayment(token) {
+                return new Promise(function (resolve, reject) {
+                    var xhr = new XMLHttpRequest;
+                    var requestUrl = 'https://payment-test-zotlo.stage.mobylonia.com/applepay/authorize';
+
+                    xhr.open('POST', requestUrl);
+
+                    xhr.onload = function () {
+                        if (this.status >= 200 && this.status < 300) {
+                            return resolve(JSON.parse(xhr.response));
+                        } else {
+                            return reject({
+                                status: this.status,
+                                statusText: xhr.statusText
+                            });
+                        }
+                    };
+
+                    xhr.onerror = function () {
+                        return reject({
+                            status: this.status,
+                            statusText: xhr.statusText
+                        });
+                    };
+
+                    xhr.setRequestHeader('Content-Type', 'application/json');
+
+                    return xhr.send(JSON.stringify({
+                        token: JSON.stringify(token),
+                        transactionId: '<?php echo $transactionId; ?>',
+                        paymentHash: '<?php echo $paymentHash; ?>',
+                        paymentMethod: 'applePay',
+                    }));
+                });
+            }
 
             /**
              * This will show up the modal for payments through Apple Pay
