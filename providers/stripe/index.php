@@ -21,9 +21,9 @@ try {
     $subscriberId = \Ramsey\Uuid\Uuid::uuid4()->toString();
 
     $body = '{
-        "providerId": 903,
+        "providerId": 3,
         "language": "tr",
-        "packageId": "braintree_package",
+        "packageId": "stripe_monthly",
         "platform": "ios",
         "subscriberPhoneNumber": "+905070000000",
         "subscriberFirstname": "Yusuf",
@@ -50,8 +50,8 @@ try {
     $currency = $data['result']['form']['currency'];
     $locale = 'tr_TR';
 
-} catch (Throwable $throwable) {
-    var_dump($throwable);
+} catch (\Throwable $throwable) {
+    var_dump($throwable->getMessage());
     die;
 }
 ?>
@@ -258,6 +258,18 @@ try {
                     // your `return_url`. For some payment methods like iDEAL, your customer will
                     // be redirected to an intermediate site first to authorize the payment, then
                     // redirected to the `return_url`.
+
+                    fetch("/providers/stripe/update.php", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(data),
+                    }).then((response) => response.json())
+                        .catch((error) => {
+                            console.error("Error:", error);
+                        });
+
                     if (result.error.type === "card_error" || result.error.type === "validation_error") {
                         showMessage(error.message);
                     } else {
