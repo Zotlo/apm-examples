@@ -73,5 +73,11 @@
     </a>
 </div>
 
+--- Stripe ApplePay & GooglePay
+<div>
+    <a href="/providers/stripe-applepay/index.php" target="_blank" class="payment-button">
+        <img src="/static/providers/apay.png" alt="Braintree Logo" width="150" height="50">
+    </a>
+</div>
 </body>
 </html>
